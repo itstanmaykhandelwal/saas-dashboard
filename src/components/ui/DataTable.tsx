@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+
 const data = [
     {
         id: "#987654",
@@ -28,22 +30,31 @@ const data = [
 ];
 
 const statusColor: any = {
-    Shipped: "bg-green-100 text-green-600",
-    Pending: "bg-yellow-100 text-yellow-600",
-    Cancelled: "bg-red-100 text-red-600",
+    Shipped:
+        "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400",
+    Pending:
+        "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400",
+    Cancelled:
+        "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400",
 };
 
-export default function DataTable() {
+function DataTable() {
     return (
-        <div className="mt-10 bg-white p-5 rounded-2xl shadow-sm border">
-            <h2 className="text-lg font-semibold mb-4 text-gray-800">
+        <div className="mt-10 bg-white/90 dark:bg-gray-800/80 backdrop-blur 
+                    p-5 rounded-2xl border border-gray-100 dark:border-gray-700 
+                    shadow-sm">
+
+            {/* Header */}
+            <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">
                 Recent Orders
             </h2>
 
             <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left">
+
+                    {/* Head */}
                     <thead>
-                        <tr className="text-gray-500 border-b">
+                        <tr className="text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
                             <th className="py-3">ID</th>
                             <th>Product</th>
                             <th>Customer</th>
@@ -53,19 +64,34 @@ export default function DataTable() {
                         </tr>
                     </thead>
 
+                    {/* Body */}
                     <tbody>
                         {data.map((item, i) => (
                             <tr
                                 key={i}
-                                className="border-b hover:bg-gray-50 transition"
+                                className="border-b border-gray-100 dark:border-gray-700 
+                           hover:bg-gray-50 dark:hover:bg-gray-700/50 
+                           transition"
                             >
-                                <td className="py-3 font-medium text-gray-700">
+                                <td className="py-3 font-medium text-gray-700 dark:text-gray-200">
                                     {item.id}
                                 </td>
-                                <td>{item.product}</td>
-                                <td>{item.customer}</td>
-                                <td>{item.date}</td>
-                                <td className="font-medium">{item.amount}</td>
+
+                                <td className="text-gray-600 dark:text-gray-300">
+                                    {item.product}
+                                </td>
+
+                                <td className="text-gray-600 dark:text-gray-300">
+                                    {item.customer}
+                                </td>
+
+                                <td className="text-gray-500 dark:text-gray-400">
+                                    {item.date}
+                                </td>
+
+                                <td className="font-medium text-gray-800 dark:text-gray-100">
+                                    {item.amount}
+                                </td>
 
                                 <td>
                                     <span
@@ -77,8 +103,11 @@ export default function DataTable() {
                             </tr>
                         ))}
                     </tbody>
+
                 </table>
             </div>
         </div>
     );
 }
+
+export default React.memo(DataTable);
