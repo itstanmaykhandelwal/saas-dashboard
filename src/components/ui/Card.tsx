@@ -2,6 +2,7 @@
 
 import { LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
+import React from "react";
 
 type Props = {
     title: string;
@@ -11,13 +12,14 @@ type Props = {
     icon: LucideIcon;
 };
 
-export default function Card({
+function Card({
     title,
     value,
     trend = "+0%",
     trendType = "up",
     icon: Icon,
 }: Props) {
+    console.log("Card render"); // debug
     return (
         <motion.div
             whileHover={{ y: -4, scale: 1.01 }}
@@ -66,3 +68,4 @@ export default function Card({
         </motion.div>
     );
 }
+export default React.memo(Card);

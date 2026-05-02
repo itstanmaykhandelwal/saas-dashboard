@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Users, IndianRupee, TrendingUp } from "lucide-react";
 
 import MainLayout from "@/components/layout/MainLayout";
@@ -20,6 +20,17 @@ export default function DashboardPage() {
 
     const { data, isLoading, error } = useDashboardData(range);
 
+    // 🔥 stable chart data (IMPORTANT)
+    const userGrowth = useMemo(
+        () => data?.userGrowth ?? [],
+        [data?.userGrowth]
+    );
+
+    const revenueData = useMemo(
+        () => data?.revenueData ?? [],
+        [data?.revenueData]
+    );
+
     // ❌ Error state
     if (error) {
         return (
@@ -31,7 +42,7 @@ export default function DashboardPage() {
         );
     }
 
-    // ✅ Skeleton loading
+    // ✅ Loading skeleton
     if (isLoading && !data) {
         return (
             <MainLayout>
@@ -40,14 +51,14 @@ export default function DashboardPage() {
                         Dashboard Overview
                     </h1>
 
-                    {/* Cards Skeleton */}
+                    {/* Cards */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <Skeleton className="h-24" />
                         <Skeleton className="h-24" />
                         <Skeleton className="h-24" />
                     </div>
 
-                    {/* Charts Skeleton */}
+                    {/* Charts */}
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <Skeleton className="h-[320px] lg:col-span-2" />
                         <Skeleton className="h-[320px]" />
@@ -57,11 +68,10 @@ export default function DashboardPage() {
         );
     }
 
-    // ✅ UI
     return (
         <MainLayout>
             <div className="space-y-6">
-                {/* 🔥 Header */}
+                {/* 🔹 Header */}
                 <div className="flex justify-between items-center">
                     <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
                         Dashboard Overview
@@ -82,7 +92,7 @@ export default function DashboardPage() {
 
                     <Card
                         title="Revenue"
-                        value={`₹${data?.revenue ?? 0}`}
+                        value={data?.revenue ?? 0} // ✅ FIXED (no string)
                         trend="+8%"
                         trendType="up"
                         icon={IndianRupee}
@@ -90,7 +100,7 @@ export default function DashboardPage() {
 
                     <Card
                         title="Conversion"
-                        value={`${data?.conversion ?? 0}%`}
+                        value={data?.conversion ?? 0} // ✅ FIXED
                         trend="-2%"
                         trendType="down"
                         icon={TrendingUp}
@@ -100,15 +110,15 @@ export default function DashboardPage() {
                 {/* 🔹 Chart + Activity */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="lg:col-span-2">
-                        <UserChart data={data?.userGrowth || []} />
+                        <UserChart data={userGrowth} />
                     </div>
 
                     <Activity />
                 </div>
 
                 {/* 🔹 Revenue */}
-                <div className="grid">
-                    <RevenueChart data={data?.revenueData || []} />
+                <div>
+                    <RevenueChart data={revenueData} />
                 </div>
 
                 {/* 🔹 Insights */}

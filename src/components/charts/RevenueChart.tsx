@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useMemo } from "react";
 import {
     BarChart,
     Bar,
@@ -14,8 +15,12 @@ type Props = {
     data?: { month: string; revenue: number }[];
 };
 
-export default function RevenueChart({ data = [] }: Props) {
-    const total = data.reduce((acc, item) => acc + item.revenue, 0);
+function RevenueChart({ data = [] }: Props) {
+    // const total = data.reduce((acc, item) => acc + item.revenue, 0);
+    const total = useMemo(
+        () => data.reduce((acc, item) => acc + item.revenue, 0),
+        [data]
+    );
 
     return (
         <div className="bg-white/90 backdrop-blur p-5 rounded-2xl border border-gray-100 shadow-sm h-[360px] flex flex-col">
@@ -37,7 +42,7 @@ export default function RevenueChart({ data = [] }: Props) {
             </div>
 
             {/* 🔹 Chart */}
-            <div className="flex-1">
+            <div className="flex-1 min-h-[300px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={data}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#f1f1f1" />
@@ -84,3 +89,4 @@ export default function RevenueChart({ data = [] }: Props) {
         </div>
     );
 }
+export default React.memo(RevenueChart);
